@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, Text, Button} from 'react-native';
+import {SafeAreaView, Text, Button, Alert} from 'react-native';
 import LoginForm from '../../Components/LoginForm';
 import {useSelector, useDispatch} from 'react-redux';
 import {useState} from 'react';
@@ -19,7 +19,7 @@ const SignIn = ({navigation}) => {
     {dispatch(logIn({mail: userEmail, password: userPassword})),
     AsyncStorage.setItem('savedUser', JSON.stringify({mail: userEmail, password: userPassword})
     )}
-    );
+    ).catch((error) => {Alert.alert("Snapchat", error.message)});
     }
     
 
