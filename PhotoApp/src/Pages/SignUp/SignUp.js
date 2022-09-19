@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, Text} from 'react-native';
+import {Alert, SafeAreaView, Text} from 'react-native';
 import styles from './SignUp.style';
 import LoginForm from '../../Components/LoginForm';
 import {useSelector, useDispatch} from 'react-redux';
@@ -13,12 +13,22 @@ const SignUp = ({navigation}) => {
 	const [newUserName, setNewUserName] = useState('');
 	const [newUserSurname, setNewUserSurname] = useState('');
     const theme = useSelector(state => state.theme.theme)
-	registerUser = async (email, password, firstName, lastName) => {
+
+	const registerUser = async (email, password, firstName, lastName) => {
 		await firebase.auth().createUserWithEmailAndPassword(newUserEmail, newUserPassword)
 		.then(()=> {firebase.firestore().collection('users')
 		.doc(firebase.auth().currentUser.uid)
 		.set({newUserName, newUserSurname, newUserEmail})}).catch((error)=>{alert(error.message)})
 		.catch((error => {alert(error.message)}))}
+
+	const signUpButton = () => {
+		if (newUserRePassword === newUserPassword) {
+			registerUser();
+			navigation.navigate("SignIn");
+		} else {
+			Alert.alert("Snapchat", "Passwords do not match.")
+		}
+	}
 
 	return (
 	<SafeAreaView style={[styles.container, styles[`container${theme}`]]}>
@@ -40,7 +50,7 @@ const SignUp = ({navigation}) => {
 	  repasswordFormTask={setNewUserRePassword}
 	  userNameFormTask={setNewUserName}
 	  userSurnameFormTask={setNewUserSurname}
-	  task1={()=> {registerUser();navigation.navigate("SignIn")}}
+	  task1={signUpButton}
 	  securityFalse={false}
 	  securityTrue={true}
 	/>
