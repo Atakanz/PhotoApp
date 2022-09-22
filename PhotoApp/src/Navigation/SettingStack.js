@@ -18,6 +18,9 @@ export const SettingStack = () => (
 		<Stack.Screen 
         name='ThemeSettingsScreen' 
         component={ThemeSettings} />
+		{/* <Stack.Screen 
+        name='CameraScreen' 
+        component={CameraScreen} /> */}
 	</Stack.Navigator>
 );
 
