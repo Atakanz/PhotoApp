@@ -17,8 +17,9 @@ export const BottomTab = ({navigation}) => {
 	return (
 	<Tab.Navigator screenOptions={{
         headerTintColor: theme === 'Dark' ? '#fff' : '#212121',
+		tabBarShowLabel:false,
         headerStyle: {
-          backgroundColor: theme === 'Dark' ? '#212121' : '#20b2aa',
+          backgroundColor: theme === 'Dark' ? '#212121' : '#f1ff69',
         },
         tabBarInactiveBackgroundColor: theme === 'Dark' ? '#212121' : '#fff',
         tabBarActiveBackgroundColor: theme === 'Dark' ? '#212121' : '#fff',
