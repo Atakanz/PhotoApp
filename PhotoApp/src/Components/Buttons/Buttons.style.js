@@ -2,21 +2,25 @@ import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   button: {
-    borderRadius: 10,
+    borderRadius: 20,
+    flexDirection: 'row',
     marginTop: 20,
-    backgroundColor: '#212121',
-    paddingVertical: 10,
-    paddingHorizontal: 50,
-    marginHorizontal: 5,
+    justifyContent: 'center',
+    backgroundColor: '#fff',
     alignItems: 'center',
-  },
+    paddingVertical: 8,
+    marginHorizontal: 5,
+    paddingHorizontal: 50,
+    borderColor: '#212121',
+    borderWidth: 1.4,
+    },
   buttonDark: {
     backgroundColor: '#FFFC00',
   },
   text: {
-    fontSize: 13,
+    fontSize: 16,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#212121',
   },
   textDark: {
     color: '#212121',
