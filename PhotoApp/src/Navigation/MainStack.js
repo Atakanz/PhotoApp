@@ -3,9 +3,11 @@ import {NavigationContainer} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {BottomTab} from './BottomTab'
 import {useDispatch, useSelector} from 'react-redux';
+import {firebase} from '../../config';
 import {setUser} from '../Management/Features/User/userSlice';
 import LoginStack from './LoginStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CameraScreen from '../Pages/CameraScreen/CameraScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +20,10 @@ export const MainStack = () => {
     let userData = await AsyncStorage.getItem('savedUser');
     const _user = userData ? JSON.parse(userData) : null;
     dispatch(setUser(_user));
+    console.log(_user);
+    if (_user !== null){
+    firebase.auth().signInWithEmailAndPassword(_user.mail, _user.password)
+  }
   };
   
   useEffect(() => {
@@ -36,6 +42,7 @@ export const MainStack = () => {
   ) : (
     <>
       <Stack.Screen name='BottomTab' component={BottomTab} />
+      <Stack.Screen name='CameraScreen' component={CameraScreen} />
     </>
   )}
   </Stack.Navigator>
