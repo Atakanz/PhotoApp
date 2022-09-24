@@ -1,26 +1,33 @@
 import React from 'react';
-import {SafeAreaView, Text, Button, Alert} from 'react-native';
+import {SafeAreaView} from 'react-native';
 import LoginForm from '../../Components/LoginForm';
 import {useSelector, useDispatch} from 'react-redux';
 import {useState} from 'react';
 import styles from './SignIn.style';
 import {logIn} from '../../Management/Features/User/userSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {firebase} from '../../../config';
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {doc, getDoc} from 'firebase/firestore';
+import {auth, db} from '../../../config';
 
 const SignIn = ({navigation}) => {
     const [userEmail, setUserEmail] = useState(null);
-	const [userPassword, setUserPassword] = useState(null);
+	  const [userPassword, setUserPassword] = useState(null);
     const dispatch = useDispatch();
 
-  
+
     const loginUserButton = async () => {
-    await firebase.auth().signInWithEmailAndPassword(userEmail, userPassword).then(() => 
-    {dispatch(logIn({mail: userEmail, password: userPassword})),
-    AsyncStorage.setItem('savedUser', JSON.stringify({mail: userEmail, password: userPassword})
-    )}
-    ).catch((error) => {Alert.alert("Snapchat", error.message)});
-    }
+        signInWithEmailAndPassword(auth, userEmail, userPassword)
+          .then(async response => {
+            const userDoc = doc(db, 'users', response.user.uid);
+            const userRef = await getDoc(userDoc);
+            if (userRef.exists()) {
+                dispatch(logIn({mail: userEmail, password: userPassword}));
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          });
+      };
     
 
     const navigateSignUp = () => {

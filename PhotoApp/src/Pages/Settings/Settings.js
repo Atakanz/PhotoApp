@@ -6,14 +6,16 @@ import UserInfoCard from '../../Components/UserInfoCard';
 import {useSelector} from 'react-redux';
 import {logOut} from '../../Management/Features/User/userSlice';
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
-import {firebase} from '../../../config';
+
 
 const Settings = ({navigation}) => {
-    const theme = useSelector(state => state.theme.theme)
+    const theme = useSelector(state => state.theme.theme);
     const dispatch = useDispatch();     
-	const logout = () => {
+	const logOutTask = () => {
 		dispatch(logOut(null));
+        AsyncStorage.removeItem('savedUser');
 	}
     const colorSelect = theme === 'Dark' ? '#fff' : '#212121';
 	const themeIcon = <Icon name="compare" size={30} 
@@ -45,7 +47,7 @@ const Settings = ({navigation}) => {
              <Buttons
                name="Log out"
                icon={logOutIcon}
-               task={logout}
+               task={logOutTask}
               />
 		  </View>
           </View>

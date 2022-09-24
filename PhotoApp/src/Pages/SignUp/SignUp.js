@@ -3,8 +3,10 @@ import {Alert, SafeAreaView, Text} from 'react-native';
 import styles from './SignUp.style';
 import LoginForm from '../../Components/LoginForm';
 import {useSelector, useDispatch} from 'react-redux';
+import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {setDoc, doc} from 'firebase/firestore';
+import {auth, db} from '../../../config';
 import {useState} from 'react';
-import {firebase} from '../../../config';
 
 const SignUp = ({navigation}) => {
     const [newUserEmail, setNewUserEmail] = useState('');
@@ -14,12 +16,17 @@ const SignUp = ({navigation}) => {
 	const [newUserSurname, setNewUserSurname] = useState('');
     const theme = useSelector(state => state.theme.theme)
 
-	const registerUser = async (email, password, firstName, lastName) => {
-		await firebase.auth().createUserWithEmailAndPassword(newUserEmail, newUserPassword)
-		.then(()=> {firebase.firestore().collection('users')
-		.doc(firebase.auth().currentUser.uid)
-		.set({userName, userSurname, userEmail})}).catch((error)=>{alert(error.message)})
-		.catch((error => {alert(error.message)}))}
+
+		const registerUser = async () => {
+			createUserWithEmailAndPassword(auth, newUserEmail, newUserPassword).then(
+			  async response => {
+				await setDoc(doc(db, `users`, response.user.uid), {
+				  email: response.user.email,
+				  id: response.user.uid,
+				});
+			  },
+			);
+		  };
 
 	const signUpButton = () => {
 		if (newUserRePassword === newUserPassword) {
