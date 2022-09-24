@@ -21,7 +21,7 @@ export default StyleSheet.create({
       },
       preview: {
         alignSelf: 'stretch',
-        flex: 1
+        flex: 1,
       },
       takePicButton: {
         backgroundColor: "#fff",
@@ -34,5 +34,8 @@ export default StyleSheet.create({
       },
       previewOptions: {
         flexDirection: 'row',
-      }
+        width: '100%',
+        justifyContent: 'space-evenly',
+        backgroundColor: '#FFFC00'
+      },
 })

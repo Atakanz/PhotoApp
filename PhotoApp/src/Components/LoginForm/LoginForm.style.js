@@ -16,7 +16,8 @@ export default StyleSheet.create({
   },
   logo: {
     width: 128,
-    height: 100,
+    height: 120,
+    borderRadius: 80,
   },
   logoDark: {
     width: 128,
