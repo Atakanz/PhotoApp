@@ -31,7 +31,7 @@ export const MainStack = () => {
   useEffect(() => {
     getSavedItem();
   }, [dispatch]);
- 
+  console.log("mains", user)
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{

@@ -11,7 +11,7 @@ import Buttons from '../../Components/Buttons';
 import {setAllUsers} from '../../Management/Features/User/userSlice';
 
 const Map = ({navigation}) => {
-      const user = useSelector(state => state.user.user);
+      const userLocation = useSelector(state => state.user.userLocation);
       const allUsers = useSelector(state => state.user.allUsers);
       // const [allUsers, setAllUsers] = useState([]);
       const [modalVisible, setModalVisible] = useState(false);
@@ -42,13 +42,12 @@ const Map = ({navigation}) => {
       })
       console.log("allUsers", allUsers);
       console.log("yourInfo", currentLocation);
-      console.log("user", user);
       return (
       <SafeAreaView style={styles.container}>
-        {user.latitude && <MapView 
+        {userLocation.latitude && <MapView 
             initialRegion={{ 
-              latitude: user.latitude,
-              longitude: user.longitude,
+              latitude: userLocation.latitude,
+              longitude: userLocation.longitude,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421}}
             style={styles.map} 

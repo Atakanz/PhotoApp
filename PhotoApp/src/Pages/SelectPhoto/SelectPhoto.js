@@ -5,7 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import {useRoute} from '@react-navigation/native';
 import styles from './SelectPhoto.style';
-import {setUser, setUserPosts, updateUser} from '../../Management/Features/User/userSlice';
+import {setLocation, setUserPosts, updateUser} from '../../Management/Features/User/userSlice';
 import {ref, getDownloadURL, uploadBytes} from 'firebase/storage';
 import {db, storage, auth} from '../../../config';
 import uuid from 'react-native-uuid';
@@ -17,6 +17,7 @@ import * as Location from 'expo-location';
 const SelectPhoto = ({navigation}) => {
 
     const user = useSelector(state => state.user.user)
+    const userLocation = useSelector(state => state.user.userLocation);
     const theme = useSelector(state => state.theme.theme)
     const profilePhoto = useSelector(state => state.user.profilePhoto);
     const [image, setImage] = useState();
@@ -31,7 +32,7 @@ const SelectPhoto = ({navigation}) => {
           return;
       }
       const location = await Location.getCurrentPositionAsync({})
-          dispatch(updateUser({longitude:location.coords.longitude, latitude:location.coords.latitude}));
+          dispatch(setLocation({longitude:location.coords.longitude, latitude:location.coords.latitude}));
       };
       const isFocused = useIsFocused();
 
@@ -82,7 +83,7 @@ const SelectPhoto = ({navigation}) => {
 
     const handleSubmit = async () => {
     const docRef = doc(db, "users", auth.currentUser.uid);
-    await updateDoc(docRef, {post: {post: image, longitude:user.longitude, latitude:user.latitude}});
+    await updateDoc(docRef, {post: {post: image, longitude:userLocation.longitude, latitude:userLocation.latitude}});
     dispatch(setUserPosts(image));
     }
     // console.log("posts", posts);
@@ -109,7 +110,7 @@ const SelectPhoto = ({navigation}) => {
             <View style={styles.centeredView}>
             <View style={styles.modalView}>
             {image && <Image style={styles.image} source={{uri : image}} />}
-            <Buttons task={() => {handleSubmit();setModalVisible(false);navigation.navigate("MapScreen")}} name="Share" />
+            <Buttons task={() => {handleSubmit();setModalVisible(false);}} name="Share" />
             <Buttons task={() => {setImage(null);setModalVisible(false);}} name="Discard" />
             </View>
             </View>
