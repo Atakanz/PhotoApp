@@ -1,10 +1,12 @@
 import React from 'react';
-import {SafeAreaView} from 'react-native';
+import {SafeAreaView, Image} from 'react-native';
+import styles from './SeeImage.style';
 
-const SeeImage = () => {
+const SeeImage = ({route}) => {
+    const imageUrl = route.params;
     return (
-      <SafeAreaView>
-        <Text>Hello SeeImage!</Text>
+      <SafeAreaView style={styles.container}>
+        <Image style={styles.image} source={{uri :imageUrl}} />
       </SafeAreaView>
     )
 }
