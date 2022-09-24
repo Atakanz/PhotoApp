@@ -6,6 +6,7 @@ const initialState = {
   profilePhoto: null,
   userPosts: [],
   allUsers: [],
+  userLocation: [],
 };
 
 export const userSlice = createSlice({
@@ -21,6 +22,9 @@ export const userSlice = createSlice({
     updateUser: (state, action) => {
       state.user =  {...state.user, ...action.payload};
     },
+    setLocation: (state, action) => {
+      state.userLocation =  action.payload;
+    },
     logOut: (state, action) => {
       state.user = action.payload;
     },
@@ -30,9 +34,6 @@ export const userSlice = createSlice({
     },
     setProfilePhoto: (state, action) => {
       state.profilePhoto = action.payload;
-      // firebase.firestore().collection('users')
-		  // .doc(firebase.auth().currentUser.uid)
-		  // .update({image: action.payload});
   },
     setUserPosts: (state, action) => {
       state.userPosts = [...state.userPosts, action.payload];
