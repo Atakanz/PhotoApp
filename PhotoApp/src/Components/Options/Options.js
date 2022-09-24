@@ -1,5 +1,5 @@
 import React from "react";
-import {SafeAreaView, View, Text, TouchableOpacity} from "react-native";
+import {SafeAreaView, Text, TouchableOpacity} from "react-native";
 import styles from './Options.style';
 
 const Options = ({option1, option2, option3, task1, task2, task3}) => {
@@ -11,9 +11,9 @@ const Options = ({option1, option2, option3, task1, task2, task3}) => {
            <TouchableOpacity style={styles.options} onPress={task2}>
             <Text style={styles.textOption}>{option2}</Text>
             </TouchableOpacity>
-           <TouchableOpacity style={styles.options} onPress={task3}>
+           {option3 && task3 && <TouchableOpacity style={styles.options} onPress={task3}>
             <Text style={styles.textOption}>{option3}</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>}
         </SafeAreaView>
     )
 }

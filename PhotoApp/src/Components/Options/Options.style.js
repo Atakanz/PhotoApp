@@ -8,7 +8,6 @@ export default StyleSheet.create({
         position: 'absolute',
         top: 30,
         right: 30,
-        height: 120,
         borderRadius: 2,
         borderColor: '#CFF000'
         },
@@ -17,7 +16,7 @@ export default StyleSheet.create({
         textAlign: 'center',
     },
     options: {
-        height: '33%',
+        height: 40,
         justifyContent: 'center',
     }
 });
