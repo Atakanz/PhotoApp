@@ -1,21 +1,23 @@
+import React, {useEffect, useRef, useState} from 'react';
 import {Text, View, SafeAreaView, TouchableOpacity, Image} from 'react-native';
-import {useEffect, useRef, useState} from 'react';
 import {Camera} from 'expo-camera';
 import {shareAsync} from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
 import styles from './CameraScreen.style';
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
 import {setProfilePhoto} from '../../Management/Features/User/userSlice';
-import {useDispatch} from 'react-redux';
+import {setUserPosts} from '../../Management/Features/User/userSlice';
+import {useDispatch, useSelector} from 'react-redux';
 
 
-const CameraScreen = ({route}) => {
+const CameraScreen = ({route, navigation}) => {
+  const user = useSelector(state => state.user.user)
   
   let cameraRef = useRef();
   const [hasCameraPermission, setHasCameraPermission] = useState();
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
   const [photo, setPhoto] = useState();
-  console.log(route.params)
+  const {routeName} = route.params;
   useEffect(() => {
     (async () => {
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
@@ -44,23 +46,50 @@ const CameraScreen = ({route}) => {
   
 
   if (photo) {
-    let sharePic = () => {
-      shareAsync(photo.uri).then(() => {
-        setPhoto(undefined);
-      });
-    };
-
     let savePhoto = () => {
       MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
         setPhoto(undefined);
       });
     };
     const dispatch = useDispatch();
-    const taskFunction = () => {
-      if (route.params.route === "SettingsScreen") {
+    const taskFunction = async () => {
+      if (routeName === "SettingsScreen") {
         dispatch(setProfilePhoto(photo.uri));
+        const postPhoto = await uploadImageAsync({uri:photo.uri});
+        setPhoto(undefined);
+        navigation.navigate("SettingsScreen");
+      } else {
+        dispatch(setUserPosts(
+        {post: photo.uri, 
+        longitude: user.longitude, 
+        latitude: user.latitude}));
+        setPhoto(undefined);
+        navigation.navigate("Map");
       }
-      }
+    }
+
+    const uploadImageAsync = async({uri})=> {
+      // Why are we using XMLHttpRequest? See:
+      // https://github.com/expo/expo/issues/2402#issuecomment-443726662
+      const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          resolve(xhr.response);
+        };
+        xhr.onerror = function (e) {
+          console.log(e);
+          reject(new TypeError('Network request failed'));
+        };
+        xhr.responseType = 'blob';
+        xhr.open('GET', uri, true);
+        xhr.send(null);
+      });
+      console.log("blob",blob);
+  
+      const fileRef = ref(storage, uuid.v4());
+      const result = await uploadBytes(fileRef, blob);
+      return await getDownloadURL(fileRef);
+  }
 
     
 
@@ -74,6 +103,7 @@ const CameraScreen = ({route}) => {
          color="black"
          size={40} /> : undefined}
          <Icon 
+         style= {styles.middleIcon}
          onPress={() => setPhoto(undefined)}
          name="trash-can-outline" 
          color="black"
