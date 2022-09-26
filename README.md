@@ -23,6 +23,6 @@ npm start
 ```
 Scan the qr code with expo-go.
 ```
-## TECHNICALITIES
+
 
  
